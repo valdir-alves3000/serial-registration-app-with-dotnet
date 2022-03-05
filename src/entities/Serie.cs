@@ -24,7 +24,8 @@ public class Serie : BaseEntiy
     response += "Genero: " + this.Genero + Environment.NewLine;
     response += "Título: " + this.Title + Environment.NewLine;
     response += "Descrição: " + this.Description + Environment.NewLine;
-    response += "Ano de Início: " + this.Year;
+    response += "Ano de Início: " + this.Year + Environment.NewLine;
+    response += "Excluido: " + this.Deleted + Environment.NewLine;
 
     return response;
   }
@@ -34,10 +35,15 @@ public class Serie : BaseEntiy
     return this.Title;
   }
   public int getId()
-  {
-    return this.Id;
+  {   
+    return this.Id ;
   }
   public void Delete(){
     this.Deleted = true;
+  }
+
+  public bool getDeleted()
+  {
+    return this.Deleted;
   }
 }

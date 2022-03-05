@@ -17,9 +17,9 @@ public class SerieRepository : IRepository<Serie>
       return listSerie[id];
   }
 
-  public List<Serie> ListAll()
+  public List<Serie> ListAll()  
   {
-      return listSerie;
+    return listSerie;
   }
 
   public int NextId()

@@ -19,12 +19,16 @@ class Program
           InsertSerie();
           break;        
         case "3":
+          UpdateSerie();
           break;        
         case "4":
+          DeleteSerie();
           break;        
         case "5":
+          getByIdSerie();
           break;        
         case "C":
+          Console.Clear();
           break;        
         default:
         throw new ArgumentOutOfRangeException();
@@ -35,6 +39,38 @@ class Program
     WriteLine("Obrigado por utilizar nossos serviços.");
   }
 
+  private static Serie Data(int indiceSerie){
+
+    foreach (int i in Enum.GetValues(typeof(Genero)))
+    {
+      WriteLine("{0} - {1}", i, Enum.GetName(typeof(Genero), i));
+    }
+
+    Write("Digite o gênero entre as opções acima: ");
+    int inputGenero = int.Parse(ReadLine());
+
+    Write("Digite o Título da Série: ");
+    string inputTitle = ReadLine();
+
+    Write("Digite o Ano de Início da Série: ");
+    int inputYear = int.Parse(ReadLine());
+
+    Write("Digite a Descrição da Série: ");
+    string inputDescription = ReadLine();
+
+    Serie response = new Serie(id: indiceSerie, genero: (Genero)inputGenero,title: inputTitle, year: inputYear,
+    description: inputDescription);
+
+    return response;
+  }
+
+ private static int InputId()
+ {
+  Write("Digite o ID da série: ");
+  int indiceSerie = int.Parse(ReadLine());
+      
+  return indiceSerie;
+ }
   private static void ListSeries()
   {
     WriteLine("Listar séries");
@@ -49,36 +85,45 @@ class Program
 
     foreach (var serie in listSeries)
     {
-      WriteLine("#ID {0}: - {1}",serie.getId(),serie.getTitle());
+      var deleted = serie.getDeleted();
+      if(!deleted)
+      {
+        WriteLine("#ID {0}: - {1}",serie.getId(),serie.getTitle());
+      }
     }
   }
 
-private static async void InsertSerie()
-{
-  WriteLine("Inserir nova série");
-
-  foreach (int i in Enum.GetValues(typeof(Genero)))
+  private static void InsertSerie()
   {
-    WriteLine("{0} - {1}", i, Enum.GetName(typeof(Genero), i));
+    WriteLine("Inserir nova série");
+    int indiceSerie = serieRepository.NextId();
+
+    Serie newSerie =  Data(indiceSerie);
+    serieRepository.Insert(newSerie);
   }
 
-  Write("Digite o gênero entre as opções acima: ");
-  int inputGenero = int.Parse(ReadLine());
+  private static void UpdateSerie()
+  {
+    int inputId = InputId();
+    
+    Serie updateSerie = Data(inputId);
+    serieRepository.Update(inputId, updateSerie);
+  }
 
-  Write("Digite o Título da Série: ");
-  string inputTitle = ReadLine();
+  private static void DeleteSerie()
+  {
+    int inputId = InputId();   
+    
+    serieRepository.Delete(inputId);
+  }
 
-  Write("Digite o Ano de Início da Série: ");
-  int inputYear = int.Parse(ReadLine());
+  private static void getByIdSerie()
+  {
+    int inputId = InputId();
 
-  Write("Digite a Descrição da Série: ");
-  string inputDescription = ReadLine();
+    WriteLine(serieRepository.getById(inputId));
+  }
 
-  Serie newSerie = new Serie(id: serieRepository.NextId(), genero: (Genero)inputGenero,title: inputTitle, year: inputYear,
-  description: inputDescription);
-
-  serieRepository.Insert(newSerie);
-}
   private static string GetUserOption()
   {
     WriteLine();
